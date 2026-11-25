@@ -80,6 +80,17 @@
   .Map .legend{display:flex;flex-wrap:wrap;gap:8px 14px;padding:8px 12px;font-size:12px}
   .Map .legend span{display:inline-flex;align-items:center;gap:6px}
   .Map .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block}
+  /* Accordion */
+  .Accordion{background:var(--surface);border:1px solid var(--rule);border-radius:12px;overflow:hidden}
+  .Accordion .acc-title{font-size:12px;font-weight:600;color:var(--ink-muted);padding:10px 12px;border-bottom:1px solid var(--rule);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.04em}
+  .Accordion .acc-row{border-bottom:1px solid var(--rule)}
+  .Accordion .acc-row:last-child{border-bottom:none}
+  .Accordion .acc-hd{display:flex;align-items:center;gap:8px;padding:12px 14px;cursor:pointer;font-weight:600;font-size:14px;user-select:none;background:var(--surface)}
+  .Accordion .acc-hd:hover{background:var(--surface-alt)}
+  .Accordion .acc-hd .arr{font-size:10px;margin-left:auto;transition:transform 180ms;color:var(--ink-muted)}
+  .Accordion .acc-hd.open .arr{transform:rotate(90deg)}
+  .Accordion .acc-body{padding:0 14px;max-height:0;overflow:hidden;transition:max-height 240ms ease,padding 180ms}
+  .Accordion .acc-body.open{padding:10px 14px;max-height:600px}
 </style>
 </head>
 <body>
@@ -158,6 +169,7 @@ const R={
   CodeDiff:(c,x)=>codeDiff(c,x),
   Map:(c,x)=>renderMap(c,x),
   KanbanBoard:(c,x)=>renderKanban(c,x),
+  Accordion:(c,x)=>renderAccordion(c,x),
 };
 function kids(c,x,e){for(const id of (c.children||[])){const ch=x.byId[id];if(ch)e.append(node(ch,x));}}
 function node(c,x){
@@ -216,6 +228,29 @@ function renderMap(c,x){
   return e;
 }
 
+function renderAccordion(c,x){
+  const e=$("div","Accordion");
+  if(c.title){const t=$("div","acc-title");t.append(T(c.title));e.append(t);}
+  const items=resolve(c.items,x.dm)||[];
+  const defOpen=c.defaultOpen!=null?+c.defaultOpen:0;
+  items.forEach((item,i)=>{
+    const row=$("div","acc-row");
+    const hd=$("div","acc-hd"+(i===defOpen?" open":""));
+    const arr=$("span","arr");arr.append(T("▶"));
+    hd.append(T(String(item&&item.header!=null?item.header:item||"")),arr);
+    const body=$("div","acc-body"+(i===defOpen?" open":""));
+    // body text via text node — never innerHTML
+    const bodyText=String(item&&item.body!=null?item.body:"");
+    body.append(T(bodyText));
+    hd.onclick=()=>{
+      const wasOpen=hd.classList.contains("open");
+      hd.classList.toggle("open",!wasOpen);
+      body.classList.toggle("open",!wasOpen);
+    };
+    row.append(hd,body);e.append(row);
+  });
+  return e;
+}
 function renderKanban(c,x){
   const e=$("div","KanbanBoard");
   if(c.title){const t=$("div","ct");t.append(T(c.title));e.append(t);}

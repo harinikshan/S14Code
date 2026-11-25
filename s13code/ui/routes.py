@@ -262,3 +262,22 @@ async def trip_viewer():
     if not path.exists():
         raise HTTPException(500, "trip viewer missing")
     return path.read_text(encoding="utf-8")
+
+
+@router.get("/app/recipe", response_class=HTMLResponse)
+@router.get("/app/recipe/", response_class=HTMLResponse)
+async def recipe_viewer():
+    """Recipe Assistant (Session 14 new component demo).
+
+    A UI-only application where every turn is a composed interface: the agent
+    produces a title, an ingredients DataTable, a step-by-step Accordion
+    (the new catalog component added in this PR), nutrition StatTiles, and
+    follow-up Buttons. No turn ever returns raw text.
+
+    Uses synthetic identities: tenant_id=course, project_id=s14-recipe,
+    user_id=chef-01. No credentials are stored or transmitted by the UI layer.
+    """
+    path = Path(__file__).parent / "client" / "recipe.html"
+    if not path.exists():
+        raise HTTPException(500, "recipe viewer missing")
+    return path.read_text(encoding="utf-8")

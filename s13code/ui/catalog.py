@@ -10,8 +10,9 @@ The catalog is aligned to A2UI's Basic component set: the 15 layout / text /
 input / container types A2UI Basic already defines are adopted under their real
 A2UI names (``source="a2ui-basic"``). Only the components A2UI Basic genuinely
 lacks — charts, tiles, tables, timelines, notices, the approval card, a
-code diff, a map, and a Kanban board — are kept as clearly labelled custom extensions (``source="custom"``).
-Twenty-six types in all; a student can read every one and the validator can
+code diff, a map, a Kanban board, and an Accordion — are kept as clearly labelled
+custom extensions (``source="custom"``).
+Twenty-seven types in all; a student can read every one and the validator can
 prove coverage.
 
 Property kinds:
@@ -135,6 +136,14 @@ COMPONENTS: dict[str, ComponentSpec] = {
         "columns": PropSpec("binding"),
         "onCardPress": PropSpec("action"),
         "wipLimit": PropSpec("number"),
+    }, source="custom"),
+    # Accordion: collapsible sections — each item has a plain-text header and a
+    # body bound from the data model; ``defaultOpen`` is the 0-based index of
+    # the section open on first render (-1 means all collapsed).
+    "Accordion": ComponentSpec("Accordion", {
+        "title": PropSpec("text"),
+        "items": PropSpec("binding"),
+        "defaultOpen": PropSpec("number"),
     }, source="custom"),
 }
 

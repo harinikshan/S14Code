@@ -1,0 +1,83 @@
+{
+  "description": "Captured surface proof for the Recipe Assistant / Accordion component (S14 PR).",
+  "note": "Synthetic identities used throughout. No credentials present.",
+  "tenant_id": "course",
+  "project_id": "s14-recipe",
+  "user_id": "chef-01",
+  "agent_id": "recipe-assistant",
+  "dish": "Butter Chicken",
+  "surface": {
+    "root": "root",
+    "dataModel": {
+      "dish_title": "Butter Chicken",
+      "cuisine": "North Indian",
+      "servings": 4,
+      "prep_time": "15 min",
+      "cook_time": "35 min",
+      "ingredients": [
+        {"ingredient": "Chicken thighs", "amount": "700", "unit": "g"},
+        {"ingredient": "Plain yogurt", "amount": "200", "unit": "ml"},
+        {"ingredient": "Butter", "amount": "3", "unit": "tbsp"},
+        {"ingredient": "Tomato purée", "amount": "400", "unit": "ml"},
+        {"ingredient": "Heavy cream", "amount": "100", "unit": "ml"},
+        {"ingredient": "Garlic", "amount": "4", "unit": "cloves"},
+        {"ingredient": "Ginger", "amount": "2", "unit": "cm"},
+        {"ingredient": "Garam masala", "amount": "2", "unit": "tsp"},
+        {"ingredient": "Kashmiri chili powder", "amount": "1", "unit": "tsp"},
+        {"ingredient": "Salt", "amount": "1", "unit": "tsp"}
+      ],
+      "steps": [
+        {
+          "header": "Prep — marinate the chicken",
+          "body": "Cut chicken into 4 cm pieces. Mix yogurt, garam masala, chili powder and salt in a bowl. Coat the chicken, cover and refrigerate for at least 30 minutes (overnight is better)."
+        },
+        {
+          "header": "Cook — build the sauce",
+          "body": "Melt butter in a heavy pan over medium heat. Fry garlic and ginger paste for 1 minute until fragrant. Add tomato purée and simmer for 10 minutes, stirring occasionally, until the oil separates from the sauce."
+        },
+        {
+          "header": "Cook — add chicken",
+          "body": "Add the marinated chicken pieces to the sauce. Cook uncovered for 15 minutes, turning once, until the chicken is cooked through and the sauce has thickened."
+        },
+        {
+          "header": "Plate",
+          "body": "Stir in heavy cream and simmer for 2 more minutes. Taste and adjust salt. Garnish with a swirl of cream and a sprinkle of garam masala. Serve with steamed basmati rice or warm naan."
+        }
+      ],
+      "calories": 420,
+      "protein": 38,
+      "carbs": 12,
+      "fat": 24
+    },
+    "components": [
+      {"id": "root", "type": "Column", "children": ["title", "meta_row", "divider1", "tabs_main", "action_row"]},
+      {"id": "title", "type": "Text", "text": {"$bind": "/dish_title"}, "variant": "heading"},
+      {"id": "meta_row", "type": "Row", "children": ["tile_servings", "tile_prep", "tile_cook"]},
+      {"id": "tile_servings", "type": "StatTile", "label": "Servings", "value": {"$bind": "/servings"}, "unit": "people"},
+      {"id": "tile_prep", "type": "StatTile", "label": "Prep time", "value": {"$bind": "/prep_time"}, "unit": ""},
+      {"id": "tile_cook", "type": "StatTile", "label": "Cook time", "value": {"$bind": "/cook_time"}, "unit": ""},
+      {"id": "divider1", "type": "Divider"},
+      {"id": "tabs_main", "type": "Tabs", "labels": "Ingredients,Steps,Nutrition", "children": ["ingredients_tab", "steps_tab", "nutrition_tab"]},
+      {"id": "ingredients_tab", "type": "DataTable", "columns": "ingredient,amount,unit", "rows": {"$bind": "/ingredients"}, "sortable": false, "filterKey": "ingredient"},
+      {"id": "steps_tab", "type": "Accordion", "title": "Preparation steps", "items": {"$bind": "/steps"}, "defaultOpen": 0},
+      {"id": "nutrition_tab", "type": "Row", "children": ["tile_cal", "tile_protein", "tile_carbs", "tile_fat"]},
+      {"id": "tile_cal", "type": "StatTile", "label": "Calories", "value": {"$bind": "/calories"}, "unit": "kcal"},
+      {"id": "tile_protein", "type": "StatTile", "label": "Protein", "value": {"$bind": "/protein"}, "unit": "g"},
+      {"id": "tile_carbs", "type": "StatTile", "label": "Carbs", "value": {"$bind": "/carbs"}, "unit": "g"},
+      {"id": "tile_fat", "type": "StatTile", "label": "Fat", "value": {"$bind": "/fat"}, "unit": "g"},
+      {"id": "action_row", "type": "Row", "children": ["btn_servings", "btn_variation"]},
+      {"id": "btn_servings", "type": "Button", "label": "Adjust servings", "onPress": {"action": "rerun"}},
+      {"id": "btn_variation", "type": "Button", "label": "Suggest a variation", "onPress": {"action": "rerun"}}
+    ]
+  },
+  "validator_result": {
+    "ok": true,
+    "accepted_count": 18,
+    "rejections": []
+  },
+  "invariants_checked": {
+    "catalog": "every type is in COMPONENTS — including the new Accordion",
+    "data_not_code": "all bound values resolve to plain strings/numbers — no markup in Accordion body",
+    "event": "only 'rerun' emitted, which is in REGISTERED_ACTIONS"
+  }
+}
